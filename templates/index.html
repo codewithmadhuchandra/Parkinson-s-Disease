@@ -29,12 +29,18 @@
             <div class="row mt-5">
                 <div class="col-md-4 offset-md-4">
                     <div class="custom-file">
-                        <form action="/" method="POST" enctype="multipart/form-data">
+                        {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endif %}
+                        <form action="/" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                             <div class="form-group">
                                 <div class="custom-file">
-                                    <input type="file" accept="image/*" class="custom-file-input" name="image" id="image" oninput="filesize(this);">
+                                    <input type="file" accept="image/*" class="custom-file-input" name="image" id="image" required oninput="filesize(this);">
                                     <label class="custom-file-label" for="image">Select image...</label>
                                 </div>
+                                <small class="form-text text-muted">Please select an image file (PNG, JPG, JPEG)</small>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Upload</button>
                         </form>
@@ -42,5 +48,15 @@
                 </div>
             </div>
         </div>
+        <script>
+            function validateForm() {
+                var fileInput = document.getElementById('image');
+                if (!fileInput.files || fileInput.files.length === 0) {
+                    alert('Please select an image file to upload.');
+                    return false;
+                }
+                return true;
+            }
+        </script>
     </body>
 </html>

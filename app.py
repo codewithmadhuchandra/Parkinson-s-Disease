@@ -13,19 +13,20 @@ app.config["IMAGE_UPLOADS"] = "C:\\Users\\MADHU_CHANDRA\\OneDrive\\Desktop\\gitp
 @app.route("/", methods=["GET", "POST"])
 def upload_image():
    if request.method == "POST":
-      if request.files:
-         image = request.files["image"]
-
+      if 'image' not in request.files:
+         return render_template("index.html", error="No image selected")
+      
+      image = request.files["image"]
+      
+      if image.filename == '':
+         return render_template("index.html", error="No image selected")
+      
+      if image:
          image_url = os.path.join(app.config["IMAGE_UPLOADS"], image.filename)
-
          image.save(image_url)
-
          print("Image saved")
-
          result = process_image(image_url)
-
          print(result)
-
          image_path = "static/img/" + image.filename
          return render_template("result.html", result=result, image_path=image_path)
    
